@@ -24,49 +24,74 @@ def index() -> rx.Component:
 
     Returns:
         The UI for the home page.
-    """            
-    return rx.container(
-        rx.heading(
-            "Carbon Price Curves", size = "9",
+    """
+    rx.heading(
+                "Carbon Price Curves", size = "9",
         ),
-        rx.vstack(
-            rx.form(
-                rx.vstack(
-                    rx.chakra.select(
-                        options_1,
-                        is_multi=True,
-                        placeholder="1. Select an example.",
-                        name = "option_1"
-                        ),
-                    rx.chakra.select(
-                        options_2,
-                        # is_multi=True,
-                        placeholder="2. Select an example.",
-                        name = "option_2"
-                        ),
-                    rx.chakra.select(
-                        options_3,
-                        # is_multi=True,
-                        placeholder="3. Select an example.",
-                        name = "option_3"
-                        ),
-                    rx.chakra.select(
-                        options_4,
-                        # is_multi=True,
-                        placeholder="4. Select an example.",
-                        name = "option_4"
-                        ),
-                    rx.button("Submit", type="submit"),
-                ),
-                on_submit=FormState.handleSubmit,
-                reset_on_submit=True,
-            ),
-            rx.divider(),
-            rx.heading("Results"),
-            rx.text(FormState.form_data.to_string()),
+
+    return rx.box(
+        rx.box(
+            "Graph box",
+            background_color="green",
+            border_radius="5px",
+            width="60%",
+            text_align="center",
+            display="inline-block",
+            margin_left=0,
+            float="left",
         ),
         rx.box(
-            "A way to buid apps in pure Python!\n",
-            text_align = "left",
+            "Form box",
+                rx.container(
+                rx.vstack(
+                    rx.form(
+                        rx.vstack(
+                            rx.chakra.select(
+                                options_1,
+                                is_multi=True,
+                                placeholder="1. Select an example.",
+                                name = "option_1"
+                                ),
+                            rx.chakra.select(
+                                options_2,
+                                # is_multi=True,
+                                placeholder="2. Select an example.",
+                                name = "option_2"
+                                ),
+                            rx.chakra.select(
+                                options_3,
+                                # is_multi=True,
+                                placeholder="3. Select an example.",
+                                name = "option_3"
+                                ),
+                            rx.chakra.select(
+                                options_4,
+                                # is_multi=True,
+                                placeholder="4. Select an example.",
+                                name = "option_4"
+                                ),
+                            rx.button("Submit", type="submit"),
+                        ),
+                        on_submit=FormState.handleSubmit,
+                        reset_on_submit=True,
+                    ),
+                    rx.divider(),
+                    rx.heading("Results"),
+                    rx.text(FormState.form_data.to_string()),
+                ),
+            ),
+            background_color="#CEFFEE",
+            box_shadow="rgba(0, 0, 0, 0.15) 0px 2px 8px",
+            border_radius="5px",
+            width="20%",
+            text_align="center",
+            display="inline-block",
+            margin_right=0,
+            float="right",
+            margin_left = "8px",
+            padding="8px",
         ),
+        display="flex",
+        margin=0,
+        padding=0,
     )
