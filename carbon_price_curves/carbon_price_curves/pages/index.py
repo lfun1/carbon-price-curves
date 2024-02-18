@@ -7,6 +7,7 @@ import reflex as rx
 from functools import partial
 from .models import supply_model
 from .models import demand_model
+from .models import comparison
 
 # Added for graph
 import plotly.express as px
@@ -29,7 +30,7 @@ df_price_years = pd.read_csv('assets/static_market_prices.csv')
 df_supply = supply_model(2050, "tech", "Biochar")
 
 modelInputs = {
-    "modelLength": 1, # gives us actual year
+    "modelLength": 3, # gives us actual year
     "scope1":1,
     "scope2":1,
     "scope3":1,
@@ -48,6 +49,13 @@ scenarioInputs = {
 
 df_demand = demand_model('assets/demand_ref_data.xlsx',2.6,3.7,1.7,modelInputs,scenarioInputs)
 
+# fixed values
+totalEmissions = "200000000"
+maxDecarbonizationPrice = "140"
+baselineDecarbonizationPrice = "30"
+eq_price = df_price_years[2026]
+
+df_comp = comparison(totalEmissions,maxDecarbonizationPrice,baselineDecarbonizationPrice,eq_price)
 
 def update_graphs() -> rx.Component:
     fig_test = px.line(
