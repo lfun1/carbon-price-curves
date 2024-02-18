@@ -16,18 +16,26 @@ options_1: List[str] = ["Technology", "Manufacturing", "Retail", "Finance", "Oil
 # options_4: List[str] = ["4_Option 1", "4_Option 2", "4_Option 3"]
 
 # Added for graph
-df = pd.read_csv('assets/cdr_data_test.csv')
+df_test = pd.read_csv('assets/cdr_data_test.csv')
+df_supply_2024 = pd.read_csv('assets/default_supply.csv')
 
-fig = px.line(
-    df,
+fig_test = px.line(
+    df_test,
     x="CDR Purchases",
     y="Total Sales",
     title="Global total carbon dioxide removal sales 2020-2023",
 )
 
-graph : rx.Component = rx.chakra.vstack(
-    rx.chakra.heading("Global total carbon dioxide removal sales 2020-2023"),
-    rx.plotly(data=fig, height="400px"),
+fig_supply_2024 = px.line(
+    df_supply_2024,
+    x="X",
+    y="Y",
+    title="Carbon Credits Market 2024",
+)
+
+graph_market_2024 : rx.Component = rx.chakra.vstack(
+    rx.chakra.heading("Carbon Credits Market 2024"),
+    rx.plotly(data=fig_supply_2024, height="400px"),
 )
 
 class FormState(rx.State):
@@ -51,11 +59,6 @@ class FormState(rx.State):
 
 @template(route="/", title="Home", image="/github.svg")
 def index() -> rx.Component:
-    """The home page.
-
-    Returns:
-        The UI for the home page.
-    """
     rx.heading(
                 "Carbon Price Curves", size = "9",
         ),
@@ -71,7 +74,7 @@ def index() -> rx.Component:
         ),
         rx.box(
             rx.box(
-                graph,
+                graph_market_2024,
                 background_color="white",
                 border_radius="5px",
                 width="80%",
