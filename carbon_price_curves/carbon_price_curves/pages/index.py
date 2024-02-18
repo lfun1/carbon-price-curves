@@ -14,11 +14,14 @@ options_1: List[str] = ["Technology", "Manufacturing", "Retail", "Finance", "Oil
 # options_2: List[str] = ["2_Option 1", "2_Option 2", "2_Option 3"]
 # options_3: List[str] = ["3_Option 1", "3_Option 2", "3_Option 3"]
 # options_4: List[str] = ["4_Option 1", "4_Option 2", "4_Option 3"]
+per_x_data = [1,3,4,5,6,7,8,7,9]
+per_y_data = [1,3,4,5,6,7,8,7,9]
 
 # Added for graph
 df_test = pd.read_csv('assets/cdr_data_test.csv')
 df_supply_2024 = pd.read_csv('assets/default_supply.csv')
 df_demand_market = pd.read_csv('assets/demand_market_2024_v2.csv')
+df_price_years = pd.read_csv('assets/cdr_data_test.csv')
 
 fig_test = px.line(
     df_test,
@@ -40,6 +43,26 @@ fig_demand_market = px.line(
     y="Price",
 )
 
+fig_price_years = px.line(
+    df_price_years,
+    x="CDR Purchases", # Change back to Year.
+    y="Total Sales", # Change back to Price.
+)
+
+fig_price_perC02 = {
+        "data": [{
+        "x": per_x_data,
+        "y": per_y_data,
+        "mode": "markers",
+        "type": "scatter",
+    }],
+    "layout": {
+        "title": "Total emissions cost breakdown",
+        "xaxis": {"title": "X Axis Label"},
+        "yaxis": {"title": "Y Axis Label"},
+    }
+}
+
 combined_fig = go.Figure()
 
 # Add traces from fig_supply_2024 to the new figure
@@ -57,8 +80,13 @@ combined_fig.update_layout(fig_supply_2024.layout)
 combined_fig.update_layout(xaxis=dict(range=[0, 3000000000]))
 
 graph_market_2024 : rx.Component = rx.chakra.vstack(
+    rx.text(
+        "Carbon Credit Prices Over the years",
+    ),
+    rx.plotly(data=fig_price_years, height="400px"),
     rx.chakra.heading("Carbon Credits Market 2024"),
     rx.plotly(data=combined_fig, height="400px"),
+    rx.plotly(date=fig_price_perC02, height="400px"),
 )
 
 class FormState(rx.State):
