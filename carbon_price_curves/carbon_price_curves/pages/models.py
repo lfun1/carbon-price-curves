@@ -368,7 +368,7 @@ def comparison(totalEmissions,maxDecarbonizationPrice,baselineDecarbonizationPri
   outputCompanyComparison['decarbonizationCosts'] = decarbonizationCosts
 
   df = pd.DataFrame({'x': list(outputCompanyComparison['curvePoints'].keys()), 'y': list(outputCompanyComparison['curvePoints'].values())})
-  return df
+  return df,outputCompanyComparison['carbonCreditsPurchasedTotalQ'],outputCompanyComparison['carbonCreditsPurchasedTotalCost'],outputCompanyComparison['decarbonizationCosts']
 
 def main():
     return 0
