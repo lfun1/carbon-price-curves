@@ -110,6 +110,12 @@ def template(
                         margin_bottom="20px",
                         margin_top="0px",
                     ),
+                    rx.text(
+                        "Our project informs companies on how to best optimize their \n",
+                        "net-zero plan, and provides valuable insights into the carbon \n",
+                        "credit market to aid them in their decarbonisation efforts, using user-inputs.\n",
+                        padding="20px",
+                    ),
                     rx.chakra.box(
                         page_content(),
                         **styles.template_content_style,
@@ -117,7 +123,7 @@ def template(
                     **styles.template_page_style,
                     text_size="50px",
                 ),
-                menu_button(),
+                #menu_button(),
                 align_items="flex-start",
                 transition="left 0.5s, width 0.5s",
                 position="relative",
