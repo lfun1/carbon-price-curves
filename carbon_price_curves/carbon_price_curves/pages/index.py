@@ -6,10 +6,29 @@ from typing import List
 import reflex as rx
 from functools import partial
 
+# Added for graph
+import plotly.express as px
+import pandas as pd
+
 options_1: List[str] = ["Technology", "Manufacturing", "Retail", "Finance", "Oil/Gas", "Other"]
 # options_2: List[str] = ["2_Option 1", "2_Option 2", "2_Option 3"]
 # options_3: List[str] = ["3_Option 1", "3_Option 2", "3_Option 3"]
 # options_4: List[str] = ["4_Option 1", "4_Option 2", "4_Option 3"]
+
+# Added for graph
+df = pd.read_csv('assets/cdr_data_test.csv')
+
+fig = px.line(
+    df,
+    x="CDR Purchases",
+    y="Total Sales",
+    title="Global total carbon dioxide removal sales 2020-2023",
+)
+
+graph : rx.Component = rx.chakra.vstack(
+    rx.chakra.heading("Global total carbon dioxide removal sales 2020-2023"),
+    rx.plotly(data=fig, height="400px"),
+)
 
 class FormState(rx.State):
     form_data: dict = {}
@@ -52,8 +71,8 @@ def index() -> rx.Component:
         ),
         rx.box(
             rx.box(
-                "Graph box",
-                background_color="green",
+                graph,
+                background_color="white",
                 border_radius="5px",
                 width="80%",
                 text_align="center",
