@@ -111,9 +111,10 @@ def template(
                         margin_top="0px",
                     ),
                     rx.text(
-                        "Our project informs companies on how to best optimize their \n",
-                        "net-zero plan, and provides valuable insights into the carbon \n",
-                        "credit market to aid them in their decarbonisation efforts, using user-inputs.\n",
+                        "Using supply and demand projections, our software advises companies "
+                        "on the tradeoff between decarbonizing their existing business practices "
+                        "and offsetting emissions through voluntary credit purchasing—allowing them "
+                        "to plan the most cost-effective path to net-zero emissions.",
                         padding="20px",
                     ),
                     rx.chakra.box(
