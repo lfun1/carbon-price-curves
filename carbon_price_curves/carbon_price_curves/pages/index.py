@@ -358,6 +358,22 @@ def index() -> rx.Component:
                                     name = "company_price",
                                     width = "100%",
                                 ),
+                                rx.text(
+                                        "maxDecarbonizationPrice",
+                                    ),
+                                rx.input(
+                                    placeholder="maxDecarbonizationPrice",
+                                    name = "max_decarbo",
+                                    width = "100%",
+                                ),
+                                rx.text(
+                                        "baselineDecarbonizationPrice",
+                                    ),
+                                rx.input(
+                                    placeholder="baselineDecarbonizationPrice",
+                                    name = "baseline_Decarbonization",
+                                    width = "100%",
+                                ),
                                 # rx.chakra.select(
                                 #     options_2,
                                 #     # is_multi=True,
