@@ -27,10 +27,11 @@ df_demand_market = pd.read_csv('assets/demand_market_2024_v2.csv')
 df_price_years = pd.read_csv('assets/static_market_prices.csv')
 
 
+
 df_supply = supply_model(2050, "tech", "Biochar")
 
 modelInputs = {
-    "modelLength": 3, # gives us actual year
+    "modelLength": 10, # gives us actual year
     "scope1":1,
     "scope2":1,
     "scope3":1,
@@ -50,10 +51,10 @@ scenarioInputs = {
 df_demand = demand_model('assets/demand_ref_data.xlsx',2.6,3.7,1.7,modelInputs,scenarioInputs)
 
 # fixed values
-totalEmissions = "200000000"
-maxDecarbonizationPrice = "140"
-baselineDecarbonizationPrice = "30"
-eq_price = df_price_years[2026]
+totalEmissions = 200000000
+maxDecarbonizationPrice = 140
+baselineDecarbonizationPrice = 30
+eq_price = df_price_years.iloc[2,1]
 
 df_comp = comparison(totalEmissions,maxDecarbonizationPrice,baselineDecarbonizationPrice,eq_price)
 
@@ -83,6 +84,10 @@ def update_graphs() -> rx.Component:
         x="Year", # Change back to Year.
         y="Price", # Change back to Price.
     )
+
+    fig_comp1 = go.Figure()
+    fig_comp1.add_trace(go.Scatter(x=df_comp["x"], y=df_comp["y"], mode='lines+markers', name='comparison'))
+    fig_comp1.add_trace(go.Scatter(x=[0,1], y=[eq_price, eq_price], mode='lines', name='horizontal line'))
 
     fig_market = go.Figure()
     fig_market.add_trace(go.Scatter(x=df_supply["Quantity"], y=df_supply["Price"], mode='lines+markers', name='Supply'))
@@ -123,11 +128,11 @@ def update_graphs() -> rx.Component:
             "decision-making and climate mitigation efforts.\n",
             padding="20px",
         ),
+        # rx.plotly(data=combined_fig, height="400px"),
         rx.chakra.heading("Carbon Credits Market 2024"),
-        rx.plotly(data=combined_fig, height="400px"),
-        rx.chakra.heading("Decarbonisation/ Offsetting"),
-        rx.plotly(data=fig_price_perC02, height="400px"),
         rx.plotly(data=fig_market, height="400px"),
+        rx.chakra.heading("Decarbonisation - Offsetting Tradeoffs"),
+        rx.plotly(data=fig_comp1, height="400px"),
     )
     return graph_market_2024
 

@@ -350,9 +350,9 @@ def comparison(totalEmissions,maxDecarbonizationPrice,baselineDecarbonizationPri
     curvePoints[0.05*k] = ((prob_function(2.6,3.7,1.7,0.05*k)*maxDecarbonizationPrice)+baselineDecarbonizationPrice)
   #print(curvePoints)
   outputCompanyComparison['curvePoints'] = curvePoints
-  plt.plot(curvePoints.keys(),curvePoints.values())
-  plt.axhline(y=eq_price)
-  plt.show()
+#   plt.plot(curvePoints.keys(),curvePoints.values())
+#   plt.axhline(y=eq_price)
+#   plt.show()
   carbonCreditQ = totalEmissions*(1 - closest_value(curvePoints,eq_price))
   outputCompanyComparison['carbonCreditsPurchasedTotalQ'] = carbonCreditQ
   outputCompanyComparison['carbonCreditsPurchasedTotalCost'] = carbonCreditQ*eq_price
