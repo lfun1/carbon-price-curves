@@ -21,6 +21,7 @@ template_content_style = {
     "border_radius": border_radius,
     "padding": "1em",
     "margin_bottom": "2em",
+    "height":"100%",
 }
 
 link_style = {

@@ -45,17 +45,6 @@ def menu_button() -> rx.Component:
                     )
                     for page in get_decorated_pages()
                 ],
-                rx.chakra.menu_divider(),
-                rx.chakra.menu_item(
-                    rx.chakra.link(
-                        "About", href="https://github.com/reflex-dev", width="100%"
-                    )
-                ),
-                rx.chakra.menu_item(
-                    rx.chakra.link(
-                        "Contact", href="mailto:founders@=reflex.dev", width="100%"
-                    )
-                ),
             ),
         ),
         position="fixed",
@@ -112,20 +101,29 @@ def template(
         )
         def templated_page():
             return rx.chakra.hstack(
-                sidebar(),
+                #sidebar(),
                 rx.chakra.box(
+                    rx.text(
+                        "Carbon Credits Forecast",
+                        font_weight="bold",
+                        font_size="3em",
+                        margin_bottom="20px",
+                        margin_top="0px",
+                    ),
                     rx.chakra.box(
                         page_content(),
                         **styles.template_content_style,
                     ),
                     **styles.template_page_style,
+                    text_size="50px",
                 ),
                 menu_button(),
                 align_items="flex-start",
                 transition="left 0.5s, width 0.5s",
                 position="relative",
+                display=["none", "none", "block"],
+                height="100%",
+                top="0px",
             )
-
         return templated_page
-
     return decorator
