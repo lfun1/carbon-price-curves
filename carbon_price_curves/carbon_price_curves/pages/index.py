@@ -1,5 +1,5 @@
 """The home page of the app."""
-
+import plotly.graph_objects as go
 from carbon_price_curves import styles
 from carbon_price_curves.templates import template
 from typing import List
@@ -14,10 +14,14 @@ options_1: List[str] = ["Technology", "Manufacturing", "Retail", "Finance", "Oil
 # options_2: List[str] = ["2_Option 1", "2_Option 2", "2_Option 3"]
 # options_3: List[str] = ["3_Option 1", "3_Option 2", "3_Option 3"]
 # options_4: List[str] = ["4_Option 1", "4_Option 2", "4_Option 3"]
+per_x_data = [1,3,4,5,6,7,8,7,9]
+per_y_data = [1,3,4,5,6,7,8,7,9]
 
 # Added for graph
 df_test = pd.read_csv('assets/cdr_data_test.csv')
 df_supply_2024 = pd.read_csv('assets/default_supply.csv')
+df_demand_market = pd.read_csv('assets/demand_market_2024_v2.csv')
+df_price_years = pd.read_csv('assets/cdr_data_test.csv')
 
 fig_test = px.line(
     df_test,
@@ -28,14 +32,61 @@ fig_test = px.line(
 
 fig_supply_2024 = px.line(
     df_supply_2024,
-    x="X",
-    y="Y",
+    x="Quantiy",
+    y="Price",
     title="Carbon Credits Market 2024",
 )
 
+fig_demand_market = px.line(
+    df_demand_market,
+    x="Quantiy",
+    y="Price",
+)
+
+fig_price_years = px.line(
+    df_price_years,
+    x="CDR Purchases", # Change back to Year.
+    y="Total Sales", # Change back to Price.
+)
+
+fig_price_perC02 = {
+        "data": [{
+        "x": per_x_data,
+        "y": per_y_data,
+        "mode": "markers",
+        "type": "scatter",
+    }],
+    "layout": {
+        "title": "Total emissions cost breakdown",
+        "xaxis": {"title": "X Axis Label"},
+        "yaxis": {"title": "Y Axis Label"},
+    }
+}
+
+combined_fig = go.Figure()
+
+# Add traces from fig_supply_2024 to the new figure
+for trace in fig_supply_2024.data:
+    combined_fig.add_trace(trace)
+
+# Add traces from fig_demand_market to the new figure
+for trace in fig_demand_market.data:
+    combined_fig.add_trace(trace)
+
+# Update layout from fig_supply_2024
+combined_fig.update_layout(fig_supply_2024.layout)
+
+#Custom x-axis limit.
+combined_fig.update_layout(xaxis=dict(range=[0, 3000000000]))
+
 graph_market_2024 : rx.Component = rx.chakra.vstack(
+    rx.text(
+        "Carbon Credit Prices Over the years",
+    ),
+    rx.plotly(data=fig_price_years, height="400px"),
     rx.chakra.heading("Carbon Credits Market 2024"),
-    rx.plotly(data=fig_supply_2024, height="400px"),
+    rx.plotly(data=combined_fig, height="400px"),
+    rx.plotly(date=fig_price_perC02, height="400px"),
 )
 
 class FormState(rx.State):
@@ -43,6 +94,7 @@ class FormState(rx.State):
     goal_year: int = 2035,
     goal_reduction: int = 50,
     percentage_change: int = 0,
+    model_length: int = 15,
 
     def set_end(self, goal_year: int):
         self.goal_year = goal_year
@@ -53,8 +105,10 @@ class FormState(rx.State):
     def set_change(self, percentage_change: int):
         self.percentage_change = percentage_change
 
+    def setModelLength(self, model_length: int):
+        self.model_length = model_length
+
     def handleSubmit(self, form_data: dict):
-        """Handle the form submit."""
         self.form_data = form_data
 
 @template(route="/", title="Home", image="/github.svg")
@@ -75,6 +129,9 @@ def index() -> rx.Component:
         rx.box(
             rx.box(
                 graph_market_2024,
+                rx.text(
+                    "Default graphs",
+                ),
                 background_color="white",
                 border_radius="5px",
                 width="80%",
@@ -84,7 +141,55 @@ def index() -> rx.Component:
                 float="left",
             ),
             rx.box(
-                "Select Variables",
+                rx.text(
+                    "Model Variables",
+                    padding_bottom="20px",
+                    fontWeight="bold",
+                ),
+                rx.text(
+                    "Model Length ",
+                    FormState.model_length,
+                    " years",
+                    padding_bottom="10px",
+                ),
+                rx.slider(
+                    default_value=15,
+                    min=0,
+                    max=30,
+                    on_change=FormState.setModelLength,
+                    step=1,
+                    width="100%",
+                    name="model_length",
+                ),
+                rx.text(
+                    "Choose Scope that apply",
+                    padding_top="10px",
+                    padding_bottom="10px",
+                ),
+                rx.checkbox(
+                    "Scope 1",
+                    default_checked=False,
+                    spacing="2",
+                    name = "scope_1",
+                ),
+                rx.checkbox(
+                    "Scope 2",
+                    default_checked=False,
+                    spacing="2",
+                    name = "scope_2",
+                ),
+                rx.checkbox(
+                    "Scope 3",
+                    default_checked=False,
+                    spacing="2",
+                    name = "scope_3",
+                ),
+                rx.text(
+                    "Company Variables",
+                    padding_top="20px",
+                    padding_bottom="20px",
+                    fontWeight="bold",
+                ),
                     rx.container(
                     rx.vstack(
                         rx.form(
@@ -187,7 +292,6 @@ def index() -> rx.Component:
                                     name = "company_price",
                                     width = "100%",
                                 ),
-                    
                                 # rx.chakra.select(
                                 #     options_2,
                                 #     # is_multi=True,
