@@ -324,6 +324,52 @@ def demand_model(file_path,lambdav,alphav,betav,modelInputs,scenarioInputs):
   return demand_df
 
 
+"""CDF demand"""
+"""Call: comparison(totalEmissions,maxDecarbonizationPrice,baselineDecarbonizationPrice,eq_price)"""
+def closest_value(dictionary, target): #chatgpt my love
+    closest_val = None
+    min_difference = float('inf')  # Initialize with positive infinity
+
+    for key, value in dictionary.items():
+        difference = abs(value - target)
+        if difference < min_difference:
+            min_difference = difference
+            mykey = key
+
+    return mykey
+
+totalEmissions = 17000
+maxDecarbonizationPrice = 140
+eq_price = 70
+baselineDecarbonizationPrice = 30
+
+def comparison(totalEmissions,maxDecarbonizationPrice,baselineDecarbonizationPrice,eq_price):
+  outputCompanyComparison = {}
+  curvePoints = {}
+  for k in range(20):
+    curvePoints[0.05*k] = ((prob_function(2.6,3.7,1.7,0.05*k)*maxDecarbonizationPrice)+baselineDecarbonizationPrice)
+  #print(curvePoints)
+  outputCompanyComparison['curvePoints'] = curvePoints
+  plt.plot(curvePoints.keys(),curvePoints.values())
+  plt.axhline(y=eq_price)
+  plt.show()
+  carbonCreditQ = totalEmissions*(1 - closest_value(curvePoints,eq_price))
+  outputCompanyComparison['carbonCreditsPurchasedTotalQ'] = carbonCreditQ
+  outputCompanyComparison['carbonCreditsPurchasedTotalCost'] = carbonCreditQ*eq_price
+
+
+  decarbonizationCosts = 0
+  for key, value in curvePoints.items():
+    if key < closest_value(curvePoints,eq_price):
+      decarbonizationCosts += value*0.05*totalEmissions
+    else:
+      pass
+
+  outputCompanyComparison['decarbonizationCosts'] = decarbonizationCosts
+
+  df = pd.DataFrame({'x': list(outputCompanyComparison['curvePoints'].keys()), 'y': list(outputCompanyComparison['curvePoints'].values())})
+  return df
+
 def main():
     return 0
 
