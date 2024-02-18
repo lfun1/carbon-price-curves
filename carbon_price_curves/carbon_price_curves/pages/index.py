@@ -1,5 +1,5 @@
 """The home page of the app."""
-
+import plotly.graph_objects as go
 from carbon_price_curves import styles
 from carbon_price_curves.templates import template
 from typing import List
@@ -18,6 +18,7 @@ options_1: List[str] = ["Technology", "Manufacturing", "Retail", "Finance", "Oil
 # Added for graph
 df_test = pd.read_csv('assets/cdr_data_test.csv')
 df_supply_2024 = pd.read_csv('assets/default_supply.csv')
+df_demand_market = pd.read_csv('assets/demand_market_2024_v2.csv')
 
 fig_test = px.line(
     df_test,
@@ -28,14 +29,36 @@ fig_test = px.line(
 
 fig_supply_2024 = px.line(
     df_supply_2024,
-    x="X",
-    y="Y",
+    x="Quantiy",
+    y="Price",
     title="Carbon Credits Market 2024",
 )
 
+fig_demand_market = px.line(
+    df_demand_market,
+    x="Quantiy",
+    y="Price",
+)
+
+combined_fig = go.Figure()
+
+# Add traces from fig_supply_2024 to the new figure
+for trace in fig_supply_2024.data:
+    combined_fig.add_trace(trace)
+
+# Add traces from fig_demand_market to the new figure
+for trace in fig_demand_market.data:
+    combined_fig.add_trace(trace)
+
+# Update layout from fig_supply_2024
+combined_fig.update_layout(fig_supply_2024.layout)
+
+#Custom x-axis limit.
+combined_fig.update_layout(xaxis=dict(range=[0, 3000000000]))
+
 graph_market_2024 : rx.Component = rx.chakra.vstack(
     rx.chakra.heading("Carbon Credits Market 2024"),
-    rx.plotly(data=fig_supply_2024, height="400px"),
+    rx.plotly(data=combined_fig, height="400px"),
 )
 
 class FormState(rx.State):
