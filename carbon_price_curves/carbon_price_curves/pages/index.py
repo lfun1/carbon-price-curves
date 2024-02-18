@@ -66,6 +66,7 @@ class FormState(rx.State):
     goal_year: int = 2035,
     goal_reduction: int = 50,
     percentage_change: int = 0,
+    model_length: int = 15,
 
     def set_end(self, goal_year: int):
         self.goal_year = goal_year
@@ -76,8 +77,10 @@ class FormState(rx.State):
     def set_change(self, percentage_change: int):
         self.percentage_change = percentage_change
 
+    def setModelLength(self, model_length: int):
+        self.model_length = model_length
+
     def handleSubmit(self, form_data: dict):
-        """Handle the form submit."""
         self.form_data = form_data
 
 @template(route="/", title="Home", image="/github.svg")
@@ -98,6 +101,9 @@ def index() -> rx.Component:
         rx.box(
             rx.box(
                 graph_market_2024,
+                rx.text(
+                    "Default graphs",
+                ),
                 background_color="white",
                 border_radius="5px",
                 width="80%",
@@ -107,7 +113,55 @@ def index() -> rx.Component:
                 float="left",
             ),
             rx.box(
-                "Select Variables",
+                rx.text(
+                    "Model Variables",
+                    padding_bottom="20px",
+                    fontWeight="bold",
+                ),
+                rx.text(
+                    "Model Length ",
+                    FormState.model_length,
+                    " years",
+                    padding_bottom="10px",
+                ),
+                rx.slider(
+                    default_value=15,
+                    min=0,
+                    max=30,
+                    on_change=FormState.setModelLength,
+                    step=1,
+                    width="100%",
+                    name="model_length",
+                ),
+                rx.text(
+                    "Choose Scope that apply",
+                    padding_top="10px",
+                    padding_bottom="10px",
+                ),
+                rx.checkbox(
+                    "Scope 1",
+                    default_checked=False,
+                    spacing="2",
+                    name = "scope_1",
+                ),
+                rx.checkbox(
+                    "Scope 2",
+                    default_checked=False,
+                    spacing="2",
+                    name = "scope_2",
+                ),
+                rx.checkbox(
+                    "Scope 3",
+                    default_checked=False,
+                    spacing="2",
+                    name = "scope_3",
+                ),
+                rx.text(
+                    "Company Variables",
+                    padding_top="20px",
+                    padding_bottom="20px",
+                    fontWeight="bold",
+                ),
                     rx.container(
                     rx.vstack(
                         rx.form(
@@ -210,7 +264,6 @@ def index() -> rx.Component:
                                     name = "company_price",
                                     width = "100%",
                                 ),
-                    
                                 # rx.chakra.select(
                                 #     options_2,
                                 #     # is_multi=True,
