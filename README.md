@@ -5,6 +5,8 @@ By Lisa Fung, Elias Chikwanda, Rudraksh Mohapatra, Sam Jonker
 
 Devpost: https://devpost.com/software/carbon-price-curves
 
+<img width="868" alt="dashboard" src="https://github.com/lfun1/carbon-price-curves/assets/71937811/b9cbc13e-7b71-43ce-87ec-d87e4b60fbd4">
+
 ## Inspiration
 
 As the imperative to reduce carbon emissions intensifies, businesses are increasingly adopting innovative approaches to shrink their carbon footprint. One such approach, carbon offsetting, has grown into a [$5.5 billion industry](https://journals.library.columbia.edu/index.php/cjel/article/view/10442), garnering support from both fossil fuel companies and environmental advocates alike. Rather than curbing emissions directly at their source, carbon offsets mitigate carbon pollution by either preventing potential emissions or directly extracting carbon dioxide from the atmosphere, often employing technologies such as carbon capture and storage (CCS) or direct air capture (DAC). Presently, numerous critical sectors—such as the aviation industry—face challenges in achieving decarbonization due to financial constraints, material limitations, and a lack of innovative solutions. **As such, the combination of decarbonization strategies and carbon offsetting is often the most economical; by reducing easily avoidable emissions and offsetting the rest, companies can achieve net-zero emissions without the financial pressures of complete emissions reductions.**
